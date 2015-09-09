@@ -1,0 +1,62 @@
+group 'cc.catalysts.book-store'
+description 'book-store'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    ext {
+        springBootVersion = '1.2.2.RELEASE'
+        imageIOVersion = '3.1.2'
+        junitVersion = '4.12'
+    }
+
+    repositories {
+        ivy {
+            url 'http://artifactory.internal.catalysts.cc/catalysts-release-gradle'
+            layout 'maven'
+        }
+
+        ivy {
+            url 'http://artifactory.internal.catalysts.cc/catalysts-external-maven'
+            layout 'maven'
+        }
+
+        maven { url "https://repo.spring.io/libs-release" }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:' + springBootVersion
+    }
+}
+
+jar {
+    baseName = 'book-store'
+    version =  '1.0.0'
+}
+
+repositories {
+    mavenLocal()
+    maven { url "http://artifactory.internal.catalysts.cc/catalysts-external-maven" }
+    maven { url "https://repo.spring.io/libs-release" }
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf:' + springBootVersion
+//    compile 'org.springframework.boot:spring-boot-starter-security:' + springBootVersion
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:' + springBootVersion
+    runtime 'mysql:mysql-connector-java:5.1.26'
+    testCompile 'junit:junit:' + junitVersion
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
